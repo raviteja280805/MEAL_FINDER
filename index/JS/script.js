@@ -1,21 +1,41 @@
-// ========================================
+// ===============================
+// API
+// ===============================
+
+const categoriesAPI =
+    "https://www.themealdb.com/api/json/v1/1/categories.php";
+
+const categoryMealsAPI =
+    "https://www.themealdb.com/api/json/v1/1/filter.php?c=";
+
+const searchAPI =
+    "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+
+const mealDetailsAPI =
+    "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+
+
+// ===============================
 // HTML ELEMENTS
-// ========================================
+// ===============================
 
-const categoriesContainer =
-    document.getElementById("categories");
+const categoriesContainer = document.getElementById("categories");
+const mealsContainer = document.getElementById("meals");
 
-const mealsContainer =
-    document.getElementById("meals");
+const categoryInfoSection =
+    document.getElementById("categoryInfoSection");
+
+const categoryInfo =
+    document.getElementById("categoryInfo");
 
 const mealsSection =
     document.getElementById("mealsSection");
 
-const categoriesSection =
-    document.getElementById("categoriesSection");
-
 const mealDetailsSection =
     document.getElementById("mealDetailsSection");
+
+const categoriesSection =
+    document.getElementById("categoriesSection");
 
 const mealDetails =
     document.getElementById("mealDetails");
@@ -41,45 +61,46 @@ const sideMenu =
 const menuCategories =
     document.getElementById("menuCategories");
 
-const categoryInfoSection = document.getElementById("categoryInfoSection");
 
-const categoryInfo = document.getElementById("categoryInfo");
+// ===============================
+// STORE CATEGORIES
+// ===============================
 
-
-// ========================================
-// API URL
-// ========================================
-
-const categoriesAPI =
-    "https://www.themealdb.com/api/json/v1/1/categories.php";
+let allCategories = [];
 
 
-// ========================================
+// ===============================
+// INITIAL PAGE
+// ===============================
+
+categoryInfoSection.style.display = "none";
+mealsSection.style.display = "none";
+mealDetailsSection.style.display = "none";
+categoriesSection.style.display = "block";
+
+
+// ===============================
 // LOAD CATEGORIES
-// ========================================
+// ===============================
 
 fetch(categoriesAPI)
-
     .then(response => response.json())
-
     .then(data => {
 
-        displayCategories(data.categories);
+        allCategories = data.categories;
 
-        displayMenuCategories(data.categories);
+        displayCategories(allCategories);
+        displayMenuCategories(allCategories);
 
     })
-
     .catch(error => {
-
         console.error("Category error:", error);
-
     });
 
 
-// ========================================
+// ===============================
 // DISPLAY CATEGORY CARDS
-// ========================================
+// ===============================
 
 function displayCategories(categories) {
 
@@ -87,13 +108,11 @@ function displayCategories(categories) {
 
     categories.forEach(category => {
 
-        const categoryCard =
-            document.createElement("div");
+        const categoryCard = document.createElement("div");
 
         categoryCard.classList.add("category-card");
 
         categoryCard.innerHTML = `
-
             <img
                 src="${category.strCategoryThumb}"
                 alt="${category.strCategory}"
@@ -102,10 +121,8 @@ function displayCategories(categories) {
             <span class="category-name">
                 ${category.strCategory}
             </span>
-
         `;
 
-        // When category card is clicked
         categoryCard.addEventListener("click", () => {
 
             getMealsByCategory(category.strCategory);
@@ -115,13 +132,12 @@ function displayCategories(categories) {
         categoriesContainer.appendChild(categoryCard);
 
     });
-
 }
 
 
-// ========================================
-// DISPLAY MENU CATEGORIES
-// ========================================
+// ===============================
+// DISPLAY HAMBURGER CATEGORIES
+// ===============================
 
 function displayMenuCategories(categories) {
 
@@ -129,13 +145,11 @@ function displayMenuCategories(categories) {
 
     categories.forEach(category => {
 
-        const menuItem =
-            document.createElement("div");
+        const menuItem = document.createElement("div");
 
         menuItem.classList.add("menu-category");
 
-        menuItem.textContent =
-            category.strCategory;
+        menuItem.textContent = category.strCategory;
 
         menuItem.addEventListener("click", () => {
 
@@ -148,46 +162,76 @@ function displayMenuCategories(categories) {
         menuCategories.appendChild(menuItem);
 
     });
-
 }
 
 
-// ========================================
-// FILTER MEALS BY CATEGORY
-// ========================================
+// ===============================
+// GET MEALS BY CATEGORY
+// ===============================
 
-function getMealsByCategory(category) {
+function getMealsByCategory(categoryName) {
+
+    const selectedCategory = allCategories.find(
+        category =>
+            category.strCategory.toLowerCase() ===
+            categoryName.toLowerCase()
+    );
+
+    if (selectedCategory) {
+
+        displayCategoryInfo(selectedCategory);
+
+    }
 
     const url =
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+        categoryMealsAPI +
+        encodeURIComponent(categoryName);
 
     fetch(url)
-
         .then(response => response.json())
-
         .then(data => {
 
-            mealsTitle.textContent =
-                category.toUpperCase();
+            mealsTitle.textContent = "MEALS";
 
             displayMeals(data.meals);
 
-            showMealsSection();
+            showCategoryPage();
 
         })
-
         .catch(error => {
 
-            console.error("Category meals error:", error);
+            console.error(
+                "Category meals error:",
+                error
+            );
 
         });
-
 }
 
 
-// ========================================
+// ===============================
+// DISPLAY CATEGORY INFORMATION
+// ===============================
+
+function displayCategoryInfo(category) {
+
+    categoryInfo.innerHTML = `
+        <div class="category-info">
+
+            <h2>${category.strCategory}</h2>
+
+            <p>
+                ${category.strCategoryDescription}
+            </p>
+
+        </div>
+    `;
+}
+
+
+// ===============================
 // DISPLAY MEALS
-// ========================================
+// ===============================
 
 function displayMeals(meals) {
 
@@ -195,39 +239,36 @@ function displayMeals(meals) {
 
     if (!meals) {
 
-        mealsContainer.innerHTML =
-            "<p>No meals found.</p>";
+        mealsContainer.innerHTML = `
+            <p class="no-results">
+                No meals found.
+            </p>
+        `;
 
         return;
-
     }
 
-    meals.forEach(meal => {
+    meals.forEach(function (meal) {
 
-        const mealCard =
-            document.createElement("div");
+        const mealCard = document.createElement("div");
 
         mealCard.classList.add("meal-card");
 
         mealCard.innerHTML = `
-
             <img
                 src="${meal.strMealThumb}"
                 alt="${meal.strMeal}"
             >
 
             <div class="meal-card-content">
-
-                <h3>
-                    ${meal.strMeal}
-                </h3>
-
+                <h3>${meal.strMeal}</h3>
             </div>
-
         `;
 
-        // Click meal → get full details
-        mealCard.addEventListener("click", () => {
+        mealCard.addEventListener("click", function () {
+
+            console.log("Meal clicked:", meal.strMeal);
+            console.log("Meal ID:", meal.idMeal);
 
             getMealDetails(meal.idMeal);
 
@@ -236,140 +277,182 @@ function displayMeals(meals) {
         mealsContainer.appendChild(mealCard);
 
     });
-
 }
 
 
-// ========================================
+// ===============================
 // SEARCH MEALS
-// ========================================
+// ===============================
 
 function searchMeals() {
 
     const foodName =
         searchInput.value.trim();
 
+    // Empty search
     if (foodName === "") {
 
-    showLandingPage();
+        showLandingPage();
 
-    return;
+        return;
+    }
 
-}
-
-function showLandingPage() {
-
-    // Hide search results
-    mealsSection.style.display = "none";
-
-    // Hide meal details
-    mealDetailsSection.style.display = "none";
-
-    // Show categories
-    categoriesSection.style.display = "block";
-
-    // Scroll back to the top
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
     const url =
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${foodName}`;
+        searchAPI +
+        encodeURIComponent(foodName);
 
     fetch(url)
-
         .then(response => response.json())
-
         .then(data => {
+
+            categoryInfoSection.style.display = "none";
+
+            mealDetailsSection.style.display = "none";
+
+            mealsSection.style.display = "block";
+
+            categoriesSection.style.display = "block";
 
             mealsTitle.textContent =
                 `SEARCH RESULTS FOR "${foodName.toUpperCase()}"`;
 
             displayMeals(data.meals);
 
-            showMealsSection();
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
         })
-
         .catch(error => {
 
-            console.error("Search error:", error);
+            console.error(
+                "Search error:",
+                error
+            );
 
         });
-
 }
 
 
-// ========================================
+// ===============================
 // SEARCH BUTTON
-// ========================================
+// ===============================
 
-searchBtn.addEventListener("click", () => {
+searchBtn.addEventListener(
+    "click",
+    searchMeals
+);
 
-    searchMeals();
 
-});
+// ===============================
+// SEARCH USING ENTER
+// ===============================
 
+searchInput.addEventListener(
+    "keydown",
+    event => {
 
-// ========================================
-// SEARCH USING ENTER KEY
-// ========================================
+        if (event.key === "Enter") {
 
-searchInput.addEventListener("keydown", event => {
+            searchMeals();
 
-    if (event.key === "Enter") {
-
-        searchMeals();
+        }
 
     }
+);
 
-});
 
-
-// ========================================
+// ===============================
 // GET MEAL DETAILS
-// ========================================
+// ===============================
 
 function getMealDetails(mealId) {
+
+    console.log("Getting meal details for ID:", mealId);
 
     const url =
         `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
 
     fetch(url)
+        .then(response => {
 
-        .then(response => response.json())
+            console.log("Lookup response:", response);
 
+            if (!response.ok) {
+                throw new Error("Meal details request failed");
+            }
+
+            return response.json();
+        })
         .then(data => {
 
-            const meal =
-                data.meals[0];
+            console.log("Meal details data:", data);
+
+            if (!data.meals || data.meals.length === 0) {
+                console.error("No meal found");
+                return;
+            }
+
+            const meal = data.meals[0];
 
             displayMealDetails(meal);
 
         })
-
         .catch(error => {
 
-            console.error("Meal details error:", error);
+            console.error(
+                "Meal details error:",
+                error
+            );
 
         });
-
 }
 
-
-// ========================================
+// ===============================
 // DISPLAY MEAL DETAILS
-// ========================================
+// ===============================
 
 function displayMealDetails(meal) {
 
     mealDetails.innerHTML = `
 
+        <!-- ORANGE BREADCRUMB BAR -->
+
+   <div class="meal-breadcrumb">
+
+    <button
+        class="breadcrumb-home"
+        id="breadcrumbHome"
+        type="button"
+    >
+        ⌂
+    </button>
+
+    <span class="breadcrumb-arrow">
+        &gt;&gt;
+    </span>
+
+    <span class="breadcrumb-meal">
+        ${meal.strMeal.toUpperCase()}
+    </span>
+
+</div>
+
+
+        <!-- MEAL DETAILS -->
+
         <div class="meal-details">
 
+            <h2 class="details-title">
+                MEAL DETAILS
+            </h2>
+
+
             <div class="meal-details-top">
+
+
+                <!-- MEAL IMAGE -->
 
                 <div>
 
@@ -382,21 +465,43 @@ function displayMealDetails(meal) {
                 </div>
 
 
+                <!-- MEAL INFORMATION -->
+
                 <div class="meal-info">
 
                     <h2>
                         ${meal.strMeal}
                     </h2>
 
-                    <p>
-                        <strong>Category:</strong>
-                        ${meal.strCategory}
-                    </p>
 
                     <p>
-                        <strong>Area:</strong>
-                        ${meal.strArea}
+                        <strong>Category:</strong>
+                        ${meal.strCategory || "Not available"}
                     </p>
+
+
+                    ${
+                        meal.strSource
+                            ? `
+                                <p>
+                                    <strong>Source:</strong>
+                                    <a
+                                        href="${meal.strSource}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        ${meal.strSource}
+                                    </a>
+                                </p>
+                            `
+                            : `
+                                <p>
+                                    <strong>Source:</strong>
+                                    Not available
+                                </p>
+                            `
+                    }
+
 
                     <p>
                         <strong>Tags:</strong>
@@ -404,9 +509,13 @@ function displayMealDetails(meal) {
                     </p>
 
 
+                    <!-- INGREDIENTS -->
+
                     <div class="ingredients">
 
-                        <h3>Ingredients</h3>
+                        <h3>
+                            Ingredients
+                        </h3>
 
                         <div class="ingredients-list">
 
@@ -421,9 +530,13 @@ function displayMealDetails(meal) {
             </div>
 
 
+            <!-- INSTRUCTIONS -->
+
             <div class="instructions">
 
-                <h3>Instructions</h3>
+                <h3>
+                    Instructions
+                </h3>
 
                 <p>
                     ${meal.strInstructions}
@@ -432,21 +545,41 @@ function displayMealDetails(meal) {
             </div>
 
         </div>
-
     `;
+
+
+    // ===============================
+    // SHOW MEAL DETAILS AT TOP
+    // ===============================
+
+    categoryInfoSection.style.display = "none";
+
+    mealsSection.style.display = "none";
 
     mealDetailsSection.style.display = "block";
 
-    mealDetailsSection.scrollIntoView({
+    categoriesSection.style.display = "block";
+
+
+    // Go to top of same page
+    window.scrollTo({
+        top: 0,
         behavior: "smooth"
     });
-
 }
 
+const breadcrumbHome =
+    document.getElementById("breadcrumbHome");
 
-// ========================================
-// GET INGREDIENTS
-// ========================================
+breadcrumbHome.addEventListener("click", function () {
+
+    showLandingPage();
+
+});
+
+// ===============================
+// GET INGREDIENTS + MEASUREMENTS
+// ===============================
 
 function getIngredients(meal) {
 
@@ -460,6 +593,7 @@ function getIngredients(meal) {
         const measure =
             meal[`strMeasure${i}`];
 
+
         if (
             ingredient &&
             ingredient.trim() !== ""
@@ -467,57 +601,92 @@ function getIngredients(meal) {
 
             ingredientsHTML += `
 
-                <div>
-                    ${ingredient}
-                    - ${measure || ""}
+                <div class="ingredient-item">
+
+                    <span>
+                        ${ingredient}
+                    </span>
+
+                    <span>
+                        ${measure || ""}
+                    </span>
+
                 </div>
 
             `;
-
         }
-
     }
 
     return ingredientsHTML;
-
 }
 
 
-// ========================================
-// SHOW MEALS SECTION
-// ========================================
+// ===============================
+// SHOW CATEGORY PAGE
+// ===============================
 
-function showMealsSection() {
+function showCategoryPage() {
+
+    categoryInfoSection.style.display = "block";
 
     mealsSection.style.display = "block";
 
-    mealsSection.scrollIntoView({
+    mealDetailsSection.style.display = "none";
+
+    categoriesSection.style.display = "block";
+
+
+    window.scrollTo({
+        top: 0,
         behavior: "smooth"
     });
-
 }
 
 
-// ========================================
-// HAMBURGER OPEN
-// ========================================
+// ===============================
+// SHOW LANDING PAGE
+// ===============================
 
-menuButton.addEventListener("click", () => {
+function showLandingPage() {
 
-    sideMenu.classList.add("open");
+    categoryInfoSection.style.display = "none";
 
-});
+    mealsSection.style.display = "none";
+
+    mealDetailsSection.style.display = "none";
+
+    categoriesSection.style.display = "block";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
 
 
-// ========================================
-// HAMBURGER CLOSE
-// ========================================
+// ===============================
+// OPEN HAMBURGER MENU
+// ===============================
 
-closeMenu.addEventListener("click", () => {
+menuButton.addEventListener(
+    "click",
+    () => {
 
-    sideMenu.classList.remove("open");
+        sideMenu.classList.add("open");
 
-});
+    }
+);
 
-mealsSection.style.display = "none";
-mealDetailsSection.style.display = "none";
+
+// ===============================
+// CLOSE HAMBURGER MENU
+// ===============================
+
+closeMenu.addEventListener(
+    "click",
+    () => {
+
+        sideMenu.classList.remove("open");
+
+    }
+);
