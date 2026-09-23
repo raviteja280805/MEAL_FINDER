@@ -15,11 +15,33 @@
 <body>
 
     <!-- HEADER -->
-    <header class="header">
-        <div class="container">
-            <h1>🍴 MEAL FINDER</h1>
-        </div>
-    </header>
+   <header class="header">
+
+    <div class="container header-content">
+
+        <h1>🍴 MEAL FINDER</h1>
+
+        <button id="menuButton" class="menu-button">
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+<!-- SIDE MENU -->
+
+<div id="sideMenu" class="side-menu">
+
+    <button id="closeMenu" class="close-button">
+        ×
+    </button>
+
+    <div id="menuCategories">
+        <!-- Categories will come from API -->
+    </div>
+
+</div>
 
 
     <!-- HERO SECTION -->
@@ -51,28 +73,56 @@
 
 
     <!-- CATEGORIES -->
-    <main>
+   <main>
 
-        <section class="categories-section">
+    <!-- CATEGORY INFORMATION -->
+    <section class="category-info-section" id="categoryInfoSection">
+        <div class="container">
+            <div id="categoryInfo">
+                <!-- Category description will come from API -->
+            </div>
+        </div>
+    </section>
 
-            <div class="container">
 
-                <h2 class="section-title">
-                    CATEGORIES
-                </h2>
+    <!-- MEALS -->
+    <section class="meals-section" id="mealsSection">
+        <div class="container">
+            <h2 class="section-title" id="mealsTitle">MEALS</h2>
 
-                <div id="categories" class="categories-grid">
+            <div id="meals" class="meals-grid">
+                <!-- Meals will come from API -->
+            </div>
+        </div>
+    </section>
 
-                    <!-- JavaScript will put categories here -->
 
-                </div>
+    <!-- MEAL DETAILS -->
+    <section class="meal-details-section" id="mealDetailsSection">
+        <div class="container">
 
+            <div id="mealDetails">
+                <!-- Meal details will come from API -->
             </div>
 
-        </section>
+        </div>
+    </section>
 
-    </main>
 
+    <!-- CATEGORIES -->
+    <section class="categories-section" id="categoriesSection">
+        <div class="container">
+
+            <h2 class="section-title">CATEGORIES</h2>
+
+            <div id="categories" class="categories-grid">
+                <!-- Categories will come from API -->
+            </div>
+
+        </div>
+    </section>
+
+</main>
 
     <!-- JAVASCRIPT -->
     <script src="../JS/script.js"></script>
