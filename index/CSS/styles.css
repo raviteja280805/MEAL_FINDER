@@ -587,3 +587,21 @@ body {
 
     text-transform: uppercase;
 }
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100vh;
+    background-color: white;
+    z-index: 1000;
+    padding: 50px 20px 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.side-menu.open {
+    right: 0;
+}

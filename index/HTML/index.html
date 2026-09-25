@@ -21,9 +21,14 @@
 
         <h1>🍴 MEAL FINDER</h1>
 
-        <button id="menuButton" class="menu-button">
-            ☰
-        </button>
+       <button
+    id="menuButton"
+    class="menu-button"
+    type="button"
+    onclick="openSideMenu()"
+>
+    ☰
+</button>
 
     </div>
 
@@ -33,9 +38,14 @@
 
 <div id="sideMenu" class="side-menu">
 
-    <button id="closeMenu" class="close-button">
-        ×
-    </button>
+  <button
+    id="closeMenu"
+    class="close-button"
+    type="button"
+    onclick="closeSideMenu()"
+>
+    ×
+</button>
 
     <div id="menuCategories">
         <!-- Categories will come from API -->

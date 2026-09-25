@@ -668,25 +668,27 @@ function showLandingPage() {
 // OPEN HAMBURGER MENU
 // ===============================
 
-menuButton.addEventListener(
-    "click",
-    () => {
-
-        sideMenu.classList.add("open");
-
-    }
-);
 
 
 // ===============================
 // CLOSE HAMBURGER MENU
 // ===============================
 
-closeMenu.addEventListener(
-    "click",
-    () => {
 
-        sideMenu.classList.remove("open");
 
-    }
-);
+function openSideMenu() {
+
+    const sideMenu =
+        document.getElementById("sideMenu");
+
+    sideMenu.classList.add("open");
+}
+
+
+function closeSideMenu() {
+
+    const sideMenu =
+        document.getElementById("sideMenu");
+
+    sideMenu.classList.remove("open");
+}
