@@ -51,6 +51,20 @@ const searchBtn =
 
 const menuButton =
     document.getElementById("menuButton");
+    const logo =
+    document.querySelector(".header h1");
+
+if (logo) {
+
+    logo.style.cursor = "pointer";
+
+    logo.addEventListener("click", function () {
+
+        window.location.href = "index.html";
+
+    });
+
+}
 
 const closeMenu =
     document.getElementById("closeMenu");
@@ -60,6 +74,10 @@ const sideMenu =
 
 const menuCategories =
     document.getElementById("menuCategories");
+
+
+const currentPage =
+    window.location.pathname.split("/").pop();
 
 
 // ===============================
@@ -73,11 +91,17 @@ let allCategories = [];
 // INITIAL PAGE
 // ===============================
 
-categoryInfoSection.style.display = "none";
-mealsSection.style.display = "none";
-mealDetailsSection.style.display = "none";
-categoriesSection.style.display = "block";
+if (currentPage === "index.html") {
 
+    categoryInfoSection.style.display = "none";
+
+    mealsSection.style.display = "none";
+
+    mealDetailsSection.style.display = "none";
+
+    categoriesSection.style.display = "block";
+
+}
 
 // ===============================
 // LOAD CATEGORIES
@@ -106,9 +130,10 @@ function displayCategories(categories) {
 
     categoriesContainer.innerHTML = "";
 
-    categories.forEach(category => {
+    categories.forEach(function (category) {
 
-        const categoryCard = document.createElement("div");
+        const categoryCard =
+            document.createElement("div");
 
         categoryCard.classList.add("category-card");
 
@@ -123,9 +148,10 @@ function displayCategories(categories) {
             </span>
         `;
 
-        categoryCard.addEventListener("click", () => {
+        categoryCard.addEventListener("click", function () {
 
-            getMealsByCategory(category.strCategory);
+            window.location.href =
+                `category.html?category=${encodeURIComponent(category.strCategory)}`;
 
         });
 
@@ -133,7 +159,6 @@ function displayCategories(categories) {
 
     });
 }
-
 
 // ===============================
 // DISPLAY HAMBURGER CATEGORIES
@@ -153,11 +178,10 @@ function displayMenuCategories(categories) {
 
         menuItem.addEventListener("click", () => {
 
-            getMealsByCategory(category.strCategory);
+    window.location.href =
+        `category.html?category=${encodeURIComponent(category.strCategory)}`;
 
-            sideMenu.classList.remove("open");
-
-        });
+});
 
         menuCategories.appendChild(menuItem);
 
@@ -691,4 +715,21 @@ function closeSideMenu() {
         document.getElementById("sideMenu");
 
     sideMenu.classList.remove("open");
+}
+
+
+if (currentPage === "category.html") {
+
+    const urlParams =
+        new URLSearchParams(window.location.search);
+
+    const categoryName =
+        urlParams.get("category");
+
+    if (categoryName) {
+
+        getMealsByCategory(categoryName);
+
+    }
+
 }

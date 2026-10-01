@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Meal Finder - Meal Details</title>
+
+    <link
+        rel="stylesheet"
+        href="../CSS/styles.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="container header-content">
+
+            <h1>🍴 MEAL FINDER</h1>
+
+            <button
+                id="menuButton"
+                class="menu-button"
+                type="button"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- HERO / SEARCH -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search recipes here..."
+            >
+
+            <button
+                id="searchBtn"
+                type="button"
+            >
+                🔍
+            </button>
+
+        </div>
+
+        <h2>
+            What are your favorite cuisines?
+        </h2>
+
+        <p>
+            PERSONALIZE YOUR EXPERIENCE
+        </p>
+
+    </div>
+
+</section>
+
+
+    <!-- SIDE MENU -->
+
+    <div
+        id="sideMenu"
+        class="side-menu"
+    >
+
+        <button
+            id="closeMenu"
+            class="close-button"
+            type="button"
+        >
+            ×
+        </button>
+
+        <div id="menuCategories">
+            <!-- Categories will come from API -->
+        </div>
+
+    </div>
+
+
+    <!-- MEAL DETAILS -->
+
+    <section
+        class="meal-details-section"
+        id="mealDetailsSection"
+    >
+
+        <div id="mealDetails">
+            <!-- Meal details will come from API -->
+        </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+
+    <section
+        class="categories-section"
+        id="categoriesSection"
+    >
+
+        <div class="container">
+
+            <h2 class="section-title">
+                CATEGORIES
+            </h2>
+
+            <div
+                id="categories"
+                class="categories-grid"
+            >
+                <!-- Categories will come from API -->
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script src="../JS/meal.js"></script>
+
+</body>
+
+</html>
