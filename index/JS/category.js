@@ -104,7 +104,6 @@ function loadCategoryPage(categoryName) {
 
             }
 
-            displayCategories(data.categories);
             displayMenuCategories(data.categories);
 
         })
@@ -429,9 +428,6 @@ function loadSearchPage(searchName) {
             mealsTitle.textContent =
                 `SEARCH RESULTS FOR "${searchName.toUpperCase()}"`;
 
-            displayMeals(data.meals);
-
-            categoriesSection.style.display = "block";
 
         })
         .catch(error => {
